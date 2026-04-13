@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawaiian Fish Species - Sustainable Seafood Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-bottom: 50px; }
+        .fish-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        .fish-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .rating-best { background-color: #d4edda; color: #155724; }
+        .rating-good { background-color: #fff3cd; color: #856404; }
+        .rating-avoid { background-color: #f8d7da; color: #721c24; }
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://via.placeholder.com/1200x400?text=Hawaiian+Ocean');
+            background-size: cover;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Hawaiian Seafood Guide</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link active" href="/fish">Fish Species</a>
+                <a class="nav-link" href="/basics">Seafood Basics</a>
+                <a class="nav-link" href="/guides">Consumer Guides</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <h1 class="display-4">Hawaiian Fish Species</h1>
+            <p class="lead">Discover sustainable choices for Hawaii's ocean bounty</p>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <!-- Search Bar -->
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <input type="text" id="searchInput" class="form-control form-control-lg" 
+                       placeholder="Search by name (e.g. Ahi, Mahimahi)...">
+            </div>
+        </div>
+
+        <!-- Fish Cards Grid -->
+        <div class="row" id="fishContainer">
+            <!-- Cards loaded by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        async function loadFish(filter = '') {
+            try {
+                let url = '/api/fish';
+                if (filter) {
+                    url += '?search=' + encodeURIComponent(filter);
+                }
+
+                const response = await fetch(url);
+                const fishList = await response.json();
+
+                const container = document.getElementById('fishContainer');
+                container.innerHTML = '';
+
+                fishList.forEach(fish => {
+                    let ratingClass = 'rating-good';
+                    if (fish.sustainability_rating.includes('Best')) ratingClass = 'rating-best';
+                    else if (fish.sustainability_rating.includes('Avoid')) ratingClass = 'rating-avoid';
+
+                    const cardHTML = `
+                        <div class="col-md-4 col-lg-3 mb-4">
+                            <div class="card fish-card h-100">
+                                <img src="${fish.image_url}" class="card-img-top" alt="${fish.common_name}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${fish.common_name}</h5>
+                                    <p class="card-text"><small class="text-muted">${fish.hawaiian_name}</small></p>
+                                    <span class="badge ${ratingClass} mb-2">${fish.sustainability_rating}</span>
+                                    <p class="card-text small">${fish.health_notes}</p>
+                                </div>
+                                <div class="card-footer text-muted small">
+                                    ${fish.preparation}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += cardHTML;
+                });
+
+                if (fishList.length === 0) {
+                    container.innerHTML = `<p class="text-center text-muted">No fish found matching your search.</p>`;
+                }
+            } catch (error) {
+                console.error("Error loading fish:", error);
+                document.getElementById('fishContainer').innerHTML = 
+                    `<p class="text-danger text-center">Failed to load fish data.</p>`;
+            }
+        }
+
+        // Load all fish when page loads
+        window.onload = () => loadFish();
+
+        // Live search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            loadFish(e.target.value);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

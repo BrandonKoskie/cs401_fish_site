@@ -1,6 +1,11 @@
-from flask import Blueprint, jsonify, abort, request
+from flask import Blueprint, jsonify, abort, request, render_template
 
 api_bp = Blueprint('api', __name__)
+
+# Route for the fish species html page
+@api_bp.route('/fish')
+def fish_page():
+    return render_template('fish.html')
 
 # FishSpecies Model - now includes sustainability rating directly
 fish_species = [    
