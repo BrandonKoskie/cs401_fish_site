@@ -5,7 +5,7 @@ api_bp = Blueprint('api', __name__)
 # Route for the fish species html page
 @api_bp.route('/fish')
 def fish_page():
-    return render_template('fish.html')
+    return render_template('local_fish.html')
 
 # FishSpecies Model - now includes sustainability rating directly
 fish_species = [    
