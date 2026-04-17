@@ -214,7 +214,7 @@ fish_species = [
 @api_bp.route('/')
 def home():
     return jsonify({
-        "message": "Welcome to Sustainable Hawaiian Seafood Guide",
+        "message": "Welcome to Sustainable Hawaii Seafood Guide",
         "description": "Helping consumers make informed and sustainable seafood choices in Hawaii",
         "models": {
             "fish_species": "/api/fish",
