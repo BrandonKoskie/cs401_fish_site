@@ -175,7 +175,7 @@ fish_species = [
         "scientific_name": "Octopus cyanea",
         "sustainability_rating": "Sustainable",
         "health_notes": "Low mercury.",
-        "preparation": "Luau, poke, grilled.",
+        "preparation": "Poke, grilled.",
         "description": "Common octopus, important in traditional Hawaiian cuisine.",
         "image_url": "https://via.placeholder.com/400x300?text=Hee"
     },
@@ -214,7 +214,7 @@ fish_species = [
 @api_bp.route('/')
 def home():
     return jsonify({
-        "message": "Welcome to Sustainable Hawaii Seafood Guide",
+        "message": "Welcome to the Hawaii Seafood Guide",
         "description": "Helping consumers make informed and sustainable seafood choices in Hawaii",
         "models": {
             "fish_species": "/api/fish",
