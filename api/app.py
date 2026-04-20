@@ -1,10 +1,20 @@
 from flask import Flask
-from api.routes import api_bp   # we'll create routes.py next
+from api.models import db
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///hawaii_seafood.db"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Register blueprint for routes
-app.register_blueprint(api_bp)
+    db.init_app(app)
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    from api.models import OverfishedArea, ImportedSpecies, FishingMethod  # noqa
+    from api.routes import api_bp
+    app.register_blueprint(api_bp)
+
+    return app
+
+app = create_app()
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)
