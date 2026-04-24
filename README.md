@@ -17,10 +17,10 @@ Inspired by the Monterey Bay Aquarium's Seafood Watch program, our platform tail
 ## Group Members
 
 - **Alpha Team**
-  - [Brandon Koskie]
-  - [Tallen Vidal]
-  - [Dae'onna Butler]
-  - [Kamryn Lopez]
+  - Brandon Koskie
+  - Tallen Vidal
+  - Dae'onna Butler
+  - Kamryn Lopez
 
 ## How to Run the Application
 
