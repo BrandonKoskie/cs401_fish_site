@@ -7,7 +7,7 @@ api_bp = Blueprint('api', __name__)
 # ── Fish Species (Brandon's existing code) ────────────────────────────────────
 
 @api_bp.route('/home')
-def basics_page():
+def home_page():
     return render_template('home.html')
 
 @api_bp.route('/about')
