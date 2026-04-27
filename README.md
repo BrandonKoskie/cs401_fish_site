@@ -57,5 +57,5 @@ pip install -r requirements.txt
 ```bash
 python -m api.app
 
-The website will be available at http://localhost:5000
+The website will be available at http://localhost:5000/fish
 ```
