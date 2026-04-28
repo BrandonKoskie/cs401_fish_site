@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, abort, request, render_template
 from api.models import db
-from api.models import OverfishedArea, ImportedSpecies, FishingMethod
+from api.models import OverfishedArea, ImportedSpecies, FishingMethod, ConsumerGuide
 
 api_bp = Blueprint('api', __name__)
 
@@ -188,6 +188,47 @@ def delete_fishing_method(entry_id):
     entry = db.session.get(FishingMethod, entry_id)
     if not entry:
         return jsonify({"error": f"No fishing method found with id={entry_id}"}), 404
+    db.session.delete(entry)
+    db.session.commit()
+    return jsonify({"message": f"'{entry.method}' (id={entry_id}) deleted successfully."}), 200
+
+
+# ── Consumer Guide (Kamryn) ──────────────────────────────────────────────────────
+
+@api_bp.route('/api/consumer-guides', methods=['GET'])
+def get_all_consumer_guides():
+    filters = request.args.get('filters')
+    query = ConsumerGuide.query
+    if filters:
+        query = query.filter(ConsumerGuide.filters.ilike(f'%{filters}%'))
+    entries = query.order_by(ConsumerGuide.guide_name).all()
+    return jsonify({"total": len(entries), "consumer_guides": [e.to_dict() for e in entries]}), 200
+
+@api_bp.route('/api/consumer-guides/<int:entry_id>', methods=['GET'])
+def get_consumer_guide(guide_id):
+    entry = db.session.get(ConsumerGuide, guide_id)
+    if not entry:
+        return jsonify({"error": f"No guide found with id={entry_id}"}), 404
+    return jsonify(entry.to_dict()), 200
+
+@api_bp.route('/api/consumer-guides', methods=['POST'])
+def create_consumer_guide():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Request body must be JSON."}), 400
+    missing = [f for f in ["method", "description", "sustainability_rank", "key_reasons"] if not data.get(f)]
+    if missing:
+        return jsonify({"error": f"Missing required fields: {missing}"}), 400
+    entry = ConsumerGuide(guide_name=data["guide_name"], description=data["description"], content=data["content"], filters=data["filters"], resources=data.get("resources"))
+    db.session.add(entry)
+    db.session.commit()
+    return jsonify(entry.to_dict()), 201
+
+@api_bp.route('/api/consumer-guides/<int:entry_id>', methods=['DELETE'])
+def delete_consumer_guide(guide_id):
+    entry = db.session.get(ConsumerGuide, guide_id)
+    if not entry:
+        return jsonify({"error": f"No guide found with id={entry_id}"}), 404
     db.session.delete(entry)
     db.session.commit()
     return jsonify({"message": f"'{entry.method}' (id={entry_id}) deleted successfully."}), 200

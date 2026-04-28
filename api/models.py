@@ -60,3 +60,23 @@ class FishingMethod(db.Model):
             "key_reasons":         self.key_reasons,
             "source_link":         self.source_link,
         }
+
+class ConsumerGuide(db.Model):
+    __tablename__ = "consumer_guides"
+
+    id          = db.Column(db.Integer,     primary_key=True)
+    guide_name  = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text,        nullable=False)
+    content     = db.Column(db.Text,        nullable=False)
+    filters     = db.Column(db.String(300), nullable=True)
+    resources   = db.Column(db.Text,        nullable=True)
+
+    def to_dict(self):
+        return {
+            "id":          self.id,
+            "guide_name":  self.guide_name,
+            "description": self.description,
+            "content":     self.content,
+            "filters":     self.filters,
+            "resources":   self.resources,
+        }

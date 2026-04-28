@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, '.')
 
 from api.app import app
-from api.models import db, OverfishedArea, ImportedSpecies, FishingMethod
+from api.models import db, OverfishedArea, ImportedSpecies, FishingMethod, ConsumerGuide
 
 OVERFISHED_AREAS = [
     {"area": "Oahu South Shore (Waikiki area)", "overfishing_status": "High pressure / Declining", "main_reasons": "Heavy recreational + commercial fishing, pollution", "source_link": "DLNR DAR Reports"},
@@ -35,6 +35,16 @@ FISHING_METHODS = [
     {"method": "Aquaculture (farmed)", "description": "Farm-raised fish (e.g., tilapia, some shrimp)", "sustainability_rank": "Varies (often High)", "key_reasons": "Reduces pressure on wild stocks", "source_link": "NOAA & Hawaii Seafood Council"},
 ]
 
+CONSUMER_GUIDES = [
+    {"guide_name": "Top Sustainable Poke Fish", "description": "Find enviornmentally friendly fish commonly used in poke bowls", "content": "Recommended species: Ahi, Salmon. Tip: Choose locally caught fish to reduce environmental impact. Recipe idea: Build a poke bowl with rice as a base, add cubed salmon or tuna, and optional toppings like seaweed, cucumber, and furikake for extra flavor.","filters": "poke, ahi, popular",
+        "resources": " NOAA Sustainable Seafood"},
+    {"guide_name": "Low Mercury Options for Families", "description": "Provides safe seafood choices for children and pregnant women.", "content": "Recommended species: Salmon (Low mercury), Sardines (Low mercury), Shrimp (Very low mercury), Tilapia. Tip: To avoid high-mercury fish like swordfish and bigeye tuna. Recipe idea: Grilled salmon with lemon.", "filters": "low mercury, health", "resources": "FDA Seafood Consumption"},
+    {"guide_name": "Budget Friendly Healthy Seafood Options", "description": "Affordable seafood options that are healthy and widely available.", "content": "Recommended species: Canned light tuna, Sardines, Pollock. Tip: Frozen and canned options are often cheaper but still nutritious. Recipe idea: Tuna sandwich - add mayonnaise and chopped celery to canned tuna.", "filters": "budget, low cost, easy meals", "resources": "USDA Seafood Nutrition"},
+    {"guide_name": "Seasonal Seafood Guide", "description": "Shows the best seasonal seafood options to support sustainable fishing.", "content": "Recommended seasonal fish: Ahi (year around), Mahi Mahi (spring and summer), Shrimp (year around). Tip: Eating in-season seafood reduces pressure on fish populations. Recipe idea: Seafood and white rice", "filters": "seasonal, fish, sustainable", "resources": "Hawaii Division of Aquatic Resources"},
+    {"guide_name": "Beginner’s Guide to Sustainable Seafood", "description": "Introduces beginners to making seafood choices.", "content": "Recommended species: Salmon, Tuna, Shrimp. Tip: Look for seafood certified by sustainability programs. Recipe idea: Simple baked salmon with vegetables.", "filters": "beginner, sustainable, easy", "resources": "Seafood Watch Beginner Guide"},
+    {"guide_name": "Healthy Grilling & Cooking Seafood Guide", "description": "Healthy cooking methods for seafood and seafood preparation techniques.", "content": "Recommended species: Salmon, Mahi-Mahi, Shrimp. Tip: Grilling and baking preserve nutrients and reduce added fats. Recipe idea: Grilled mahi-mahi tacos with cabbage slaw.", "filters": "cooked, grilling, recipes", "resources": "NOAA Cooking Guide"}
+]
+
 with app.app_context():
     db.drop_all()
     db.create_all()
@@ -44,7 +54,12 @@ with app.app_context():
         db.session.add(ImportedSpecies(**item))
     for item in FISHING_METHODS:
         db.session.add(FishingMethod(**item))
+    for item in CONSUMER_GUIDES:
+        db.session.add(ConsumerGuide(**item))
     db.session.commit()
     print(f"Seeded {len(OVERFISHED_AREAS)} overfished areas")
     print(f"Seeded {len(IMPORTED_SPECIES)} imported species")
     print(f"Seeded {len(FISHING_METHODS)} fishing methods")
+    print(f"Seedes {len(CONSUMER_GUIDES)} consumer guides")
+
+
