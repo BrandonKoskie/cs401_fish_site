@@ -24,7 +24,7 @@ def basics_page():
 
 @api_bp.route('/fish')
 def fish_page():
-    return render_template('local_fish.html')
+    return render_template('local_fish.html',)
 
 fish_species = [
     {"id": 1, "common_name": "Ahi", "scientific_name": "Thunnus albacares", "sustainability_rating": "Good Alternative", "health_notes": "Moderate mercury levels. Pregnant women and children should limit intake.", "preparation": "Popular for poke, sashimi, and grilling.", "description": "Yellowfin tuna is one of the most important commercial fish in Hawaii.", "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fishi-pedia.com%2Fwp-content%2Fuploads%2F2020%2F10%2FThunnus-albacares-725x483.jpg&f=1&nofb=1&ipt=b8522242eee1d1e2fb8919f4366ff0bd8f210d28d2e3984ec3a5f4a7747d718d"},
