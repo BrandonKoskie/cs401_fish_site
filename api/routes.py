@@ -14,6 +14,10 @@ def home_page():
 def about_page():
     return render_template('about.html')
 
+@api_bp.route('/guides')
+def guides_page():
+    return render_template('consumer_guides.html')
+
 @api_bp.route('/basics')
 def basics_page():
     return render_template('seafood_basics.html')
