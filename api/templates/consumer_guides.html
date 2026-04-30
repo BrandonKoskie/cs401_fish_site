@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <style>
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                url('https://plus.unsplash.com/premium_photo-1701113208672-df1d083413d9?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cG9rZSUyMGJvd2x8ZW58MHx8MHx8fDA%3D');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+</style>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consumer Guides</title>
@@ -18,6 +31,85 @@
                 <a class ="nav-link" href="/about">About</a>
             </div>
     </div>
+
 </nav>
+
+<div class="hero">
+    <h1>Consumer Seafood Guides</h1>
+    <p>Healthy • Sustainable • Affordable Choices</p>
+</div>
+
+
+<div class="container mt-4 text-center">
+
+    <button class="btn btn-outline-primary m-1" onclick="showGuide('poke')">
+        Top Sustainable Poke Fish
+    </button>
+
+    <button class="btn btn-outline-primary m-1" onclick="showGuide('mercury')">
+        Low Mercury Options
+    </button>
+
+    <button class="btn btn-outline-primary m-1" onclick="showGuide('budget')">
+        Budget Friendly
+    </button>
+
+    <button class="btn btn-outline-primary m-1" onclick="showGuide('seasonal')">
+        Seasonal Guide
+    </button>
+
+    <button class="btn btn-outline-primary m-1" onclick="showGuide('beginner')">
+        Beginner’s Guide
+    </button>
+
+    <button class="btn btn-outline-primary m-1" onclick="showGuide('healthy')">
+        Healthy Cooking
+    </button>
+
+<div class="container mt-5">
+    <div class="row" id="guidesContainer"></div>
+</div>
+
+<script>
+
+let guides = [];
+
+
+async function loadGuides() {
+    const res = await fetch('/api/consumer-guides');
+    guides = await res.json();
+}
+
+
+function showGuide(keyword) {
+
+    const found = guides.find(g =>
+        g.guide_name.toLowerCase().includes(keyword)
+        || g.filters.toLowerCase().includes(keyword)
+    );
+
+    const container = document.getElementById('guidesContainer');
+
+    if (found) {
+        container.innerHTML = `
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">${found.guide_name}</h5>
+                        <p class="card-text">${found.description}</p>
+                        <p class="card-text">${found.content}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+
+loadGuides();
+
+</script>
+
 </body>
 </html>
+
