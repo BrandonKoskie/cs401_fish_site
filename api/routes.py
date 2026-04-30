@@ -207,40 +207,72 @@ def delete_fishing_method(entry_id):
 
 # ── Consumer Guide (Kamryn) ──────────────────────────────────────────────────────
 
+CONSUMER_GUIDES = [
+    {"guide_name": "Top Sustainable Poke Fish", "description": "Find enviornmentally friendly fish commonly used in poke bowls", "content": "Recommended species: Ahi, Salmon. Tip: Choose locally caught fish to reduce environmental impact. Recipe idea: Build a poke bowl with rice as a base, add cubed salmon or tuna, and optional toppings like seaweed, cucumber, and furikake for extra flavor.","filters": "poke, ahi, popular",
+        "resources": " NOAA Sustainable Seafood"},
+    {"guide_name": "Low Mercury Options for Families", "description": "Provides safe seafood choices for children and pregnant women.", "content": "Recommended species: Salmon (Low mercury), Sardines (Low mercury), Shrimp (Very low mercury), Tilapia. Tip: To avoid high-mercury fish like swordfish and bigeye tuna. Recipe idea: Grilled salmon with lemon.", "filters": "low mercury, health", "resources": "FDA Seafood Consumption"},
+    {"guide_name": "Budget Friendly Healthy Seafood Options", "description": "Affordable seafood options that are healthy and widely available.", "content": "Recommended species: Canned light tuna, Sardines, Pollock. Tip: Frozen and canned options are often cheaper but still nutritious. Recipe idea: Tuna sandwich - add mayonnaise and chopped celery to canned tuna.", "filters": "budget, low cost, easy meals", "resources": "USDA Seafood Nutrition"},
+    {"guide_name": "Seasonal Seafood Guide", "description": "Shows the best seasonal seafood options to support sustainable fishing.", "content": "Recommended seasonal fish: Ahi (year around), Mahi Mahi (spring and summer), Shrimp (year around). Tip: Eating in-season seafood reduces pressure on fish populations. Recipe idea: Seafood and white rice", "filters": "seasonal, fish, sustainable", "resources": "Hawaii Division of Aquatic Resources"},
+    {"guide_name": "Beginner’s Guide to Sustainable Seafood", "description": "Introduces beginners to making seafood choices.", "content": "Recommended species: Salmon, Tuna, Shrimp. Tip: Look for seafood certified by sustainability programs. Recipe idea: Simple baked salmon with vegetables.", "filters": "beginner, sustainable, easy", "resources": "Seafood Watch Beginner Guide"},
+    {"guide_name": "Healthy Grilling & Cooking Seafood Guide", "description": "Healthy cooking methods for seafood and seafood preparation techniques.", "content": "Recommended species: Salmon, Mahi-Mahi, Shrimp. Tip: Grilling and baking preserve nutrients and reduce added fats. Recipe idea: Grilled mahi-mahi tacos with cabbage slaw.", "filters": "cooked, grilling, recipes", "resources": "NOAA Cooking Guide"}
+]
+
 @api_bp.route('/api/consumer-guides', methods=['GET'])
 def get_all_consumer_guides():
-    filters = request.args.get('filters')
-    query = ConsumerGuide.query
-    if filters:
-        query = query.filter(ConsumerGuide.filters.ilike(f'%{filters}%'))
-    entries = query.order_by(ConsumerGuide.guide_name).all()
-    return jsonify({"total": len(entries), "consumer_guides": [e.to_dict() for e in entries]}), 200
+    filters = request.args.get('filters', '').lower()
 
-@api_bp.route('/api/consumer-guides/<int:entry_id>', methods=['GET'])
+    result = CONSUMER_GUIDES  
+
+    if filters:
+        result = [
+            g for g in result
+            if filters in g.get("filters", "").lower()
+        ]
+
+    return jsonify(result)
+
+
+@api_bp.route('/api/consumer-guides/<int:guide_id>', methods=['GET'])
 def get_consumer_guide(guide_id):
-    entry = db.session.get(ConsumerGuide, guide_id)
-    if not entry:
-        return jsonify({"error": f"No guide found with id={entry_id}"}), 404
-    return jsonify(entry.to_dict()), 200
+    guide = next((g for g in CONSUMER_GUIDES if g.get("id") == guide_id), None)
+
+    if not guide:
+        return jsonify({"error": f"No guide found with id={guide_id}"}), 404
+
+    return jsonify(guide), 200
 
 @api_bp.route('/api/consumer-guides', methods=['POST'])
 def create_consumer_guide():
     data = request.get_json()
-    if not data:
-        return jsonify({"error": "Request body must be JSON."}), 400
-    missing = [f for f in ["method", "description", "sustainability_rank", "key_reasons"] if not data.get(f)]
-    if missing:
-        return jsonify({"error": f"Missing required fields: {missing}"}), 400
-    entry = ConsumerGuide(guide_name=data["guide_name"], description=data["description"], content=data["content"], filters=data["filters"], resources=data.get("resources"))
-    db.session.add(entry)
-    db.session.commit()
-    return jsonify(entry.to_dict()), 201
 
-@api_bp.route('/api/consumer-guides/<int:entry_id>', methods=['DELETE'])
+    if not data:
+        return jsonify({"error": "Request body must be JSON"}), 400
+
+    required_fields = ["guide_name", "description", "content", "filters"]
+
+    missing = [f for f in required_fields if not data.get(f)]
+    if missing:
+        return jsonify({"error": f"Missing fields: {missing}"}), 400
+
+    # auto-generate ID
+    new_id = max([g.get("id", 0) for g in CONSUMER_GUIDES], default=0) + 1
+    data["id"] = new_id
+
+    CONSUMER_GUIDES.append(data)
+
+    return jsonify(data), 201
+
+@api_bp.route('/api/consumer-guides/<int:guide_id>', methods=['DELETE'])
 def delete_consumer_guide(guide_id):
-    entry = db.session.get(ConsumerGuide, guide_id)
-    if not entry:
-        return jsonify({"error": f"No guide found with id={entry_id}"}), 404
-    db.session.delete(entry)
-    db.session.commit()
-    return jsonify({"message": f"'{entry.method}' (id={entry_id}) deleted successfully."}), 200
+    global CONSUMER_GUIDES
+
+    original_length = len(CONSUMER_GUIDES)
+
+    CONSUMER_GUIDES = [
+        g for g in CONSUMER_GUIDES if g.get("id") != guide_id
+    ]
+
+    if len(CONSUMER_GUIDES) == original_length:
+        return jsonify({"error": f"No guide found with id={guide_id}"}), 404
+
+    return jsonify({"message": f"Guide {guide_id} deleted"}), 200 
