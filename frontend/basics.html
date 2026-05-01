@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hawaii Seafood Basics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ocean-deep: #0a1628;
+      --ocean-mid:  #0d2b4e;
+      --ocean-teal: #0e6b6b;
+      --ocean-light:#1a9b9b;
+      --sand:       #f4ede0;
+      --coral:      #e05c3a;
+      --gold:       #e9b44c;
+      --green:      #2d8a4e;
+      --text:       #1c2b3a;
+      --muted:      #5a6b7a;
+      --border:     #dde4ea;
+      --white:      #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,22,40,0.92);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 56px;
+    }
+    .nav-brand { color: var(--white); font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      height: 65vh; min-height: 420px;
+      background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 45%, var(--ocean-teal) 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 0 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-wave {
+      position: absolute; bottom: -2px; left: 0; right: 0;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      animation: fadeUp .7s ease both;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: rgba(255,255,255,0.75);
+      max-width: 560px;
+      font-weight: 300;
+      animation: fadeUp .7s .15s ease both;
+    }
+
+    /* ── FILTER TABS ── */
+    .tabs-bar {
+      background: var(--ocean-deep);
+      padding: 1.1rem 2rem;
+      display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 0.55rem 1.4rem;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .tab-btn[data-tab="overfished"]   { background: #b83232; color: #fff; }
+    .tab-btn[data-tab="imported"]     { background: var(--gold); color: #1c1c00; }
+    .tab-btn[data-tab="fishing"]      { background: #2563eb; color: #fff; }
+    .tab-btn[data-tab="all"]          { background: #4b5563; color: #fff; }
+    .tab-btn.active { box-shadow: 0 0 0 3px rgba(255,255,255,0.5); transform: scale(1.04); }
+    .tab-btn:not(.active) { opacity: 0.65; }
+    .tab-btn:hover:not(.active) { opacity: 0.9; transform: scale(1.02); }
+
+    /* ── MAIN ── */
+    main { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 3.5rem; animation: fadeUp .5s ease both; }
+    .section.hidden { display: none; }
+
+    .section-header {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding-left: 1.2rem;
+      border-left: 4px solid var(--ocean-light);
+      margin-bottom: 1.75rem;
+    }
+    .section-header.overfished { border-color: var(--coral); }
+    .section-header.imported   { border-color: var(--gold); }
+    .section-header.fishing    { border-color: #2563eb; }
+
+    .section-icon { font-size: 2rem; line-height: 1; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 700; }
+    .section-sub { font-size: 0.9rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* ── CARDS ── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.25rem; }
+
+    .card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 2px 12px rgba(10,22,40,0.08);
+      border: 1px solid var(--border);
+      transition: transform .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    }
+    .card.overfished::before { background: var(--coral); }
+    .card.imported::before   { background: var(--gold); }
+    .card.fishing::before    { background: #2563eb; }
+
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(10,22,40,0.14); }
+
+    .card-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+    .card-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .badge-red    { background: #fde8e3; color: #b83232; }
+    .badge-orange { background: #fef3cd; color: #92650a; }
+    .badge-yellow { background: #fffbeb; color: #b45309; }
+    .badge-green  { background: #dcfce7; color: #166534; }
+    .badge-blue   { background: #dbeafe; color: #1e40af; }
+    .badge-gray   { background: #f3f4f6; color: #374151; }
+
+    .card-desc { font-size: 0.875rem; color: #3d4e5c; line-height: 1.6; }
+    .card-source { margin-top: 0.9rem; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 0.6rem; }
+
+    /* ── DIVIDER ── */
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card { animation: fadeUp .4s ease both; }
+    .card:nth-child(1) { animation-delay: .05s; }
+    .card:nth-child(2) { animation-delay: .1s; }
+    .card:nth-child(3) { animation-delay: .15s; }
+    .card:nth-child(4) { animation-delay: .2s; }
+    .card:nth-child(5) { animation-delay: .25s; }
+    .card:nth-child(6) { animation-delay: .3s; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ocean-deep);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1rem; }
+      .tabs-bar { gap: 0.5rem; }
+      .tab-btn { padding: 0.45rem 1rem; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-brand">🐟 Hawaii Seafood Watch</a>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#" class="active">Basics</a>
+    <a href="#">About</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Hawaii Seafood Basics</h1>
+  <p>Understanding overfished areas, imported seafood, and fishing methods</p>
+  <svg class="hero-wave" viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,40 C360,80 1080,0 1440,40 L1440,60 L0,60 Z" fill="#f4ede0"/>
+  </svg>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" data-tab="overfished">🐠 Overfished Areas</button>
+  <button class="tab-btn" data-tab="imported">📦 Imported Species</button>
+  <button class="tab-btn" data-tab="fishing">🎣 Fishing Methods</button>
+  <button class="tab-btn" data-tab="all">🗂 Show All</button>
+</div>
+
+<main>
+
+  <!-- OVERFISHED -->
+  <section class="section" id="sec-overfished">
+    <div class="section-header overfished">
+      <span class="section-icon">🐠</span>
+      <div>
+        <div class="section-title">Overfished Areas in Hawaii</div>
+        <div class="section-sub">Areas experiencing high fishing pressure or population decline</div>
+      </div>
+    </div>
+    <div class="cards" id="cards-overfished"></div>
+  </section>
+
+  <hr class="section-divider" id="div1">
+
+  <!-- IMPORTED -->
+  <section class="section" id="sec-imported">
+    <div class="section-header imported">
+      <span class="section-icon">📦</span>
+      <div>
+        <div class="section-title">Imported Seafood Species</div>
+        <div class="section-sub">Over 85% of seafood consumed in Hawaii is imported</div>
+      </div>
+    </div>
+    <div class="cards" id="cards-imported"></div>
+  </section>
+
+  <hr class="section-divider" id="div2">
+
+  <!-- FISHING METHODS -->
+  <section class="section" id="sec-fishing">
+    <div class="section-header fishing">
+      <span class="section-icon">🎣</span>
+      <div>
+        <div class="section-title">Fishing Methods</div>
+        <div class="section-sub">Sustainability rankings for common Hawaii fishing practices</div>
+      </div>
+    </div>
+    <div class="cards" id="cards-fishing"></div>
+  </section>
+
+</main>
+
+<footer>
+  © 2025 CS401 Hawaii Seafood Watch — Data sourced from DLNR DAR, NOAA Fisheries &amp; Seafood Watch
+</footer>
+
+<script>
+// ── DATA (from CSVs, baked in) ──────────────────────────────────────────────
+
+const overfishedData = [
+  { area: "Oahu South Shore (Waikiki area)", status: "High Pressure / Declining", reasons: "Heavy recreational + commercial fishing, pollution", source: "DLNR DAR Reports" },
+  { area: "West Hawaii (Big Island Kona)",   status: "Moderate-High",             reasons: "Tourism pressure, spearfishing, habitat loss",     source: "NOAA Coral Reef Task Force" },
+  { area: "Maui Reef Areas",                 status: "Declining in many zones",   reasons: "Overfishing of reef herbivores, coral bleaching",  source: "Hawaii Coral Reef Strategy" },
+  { area: "Main Hawaiian Islands (general)", status: "High",                      reasons: "Combined commercial + recreational pressure",      source: "NOAA Fisheries Assessment" },
+  { area: "Northwestern Hawaiian Islands",   status: "Mostly Protected / Healthy",reasons: "Marine National Monument restrictions",            source: "Papahānaumokuākea" },
+  { area: "Kaneohe Bay (Oahu)",              status: "High local pressure",        reasons: "Lay netting, pollution, habitat degradation",      source: "DLNR Marine Lab Refuge" },
+];
+
+const importedData = [
+  { species: "Shrimp",             volume: "Very High", reason: "High local demand, limited local supply",    source: "USDA FAS / Hawaii Ag Data" },
+  { species: "Atlantic Salmon",    volume: "High",      reason: "Popular for restaurants and retail",         source: "Hawaii Seafood Imports Report" },
+  { species: "Tilapia",            volume: "Medium-High",reason: "Affordable farmed protein",                 source: "NOAA Trade Data" },
+  { species: "Canned Tuna",        volume: "High",      reason: "Convenience and cost",                       source: "Hawaii Import Statistics" },
+  { species: "Frozen Yellowfin Tuna", volume: "Medium", reason: "Supplement to local catch",                  source: "NOAA Pacific Islands" },
+  { species: "Cod / Pollock",      volume: "Medium",    reason: "Used in processed foods",                    source: "USDA Foreign Agricultural Service" },
+];
+
+const fishingData = [
+  { method: "Spearfishing (Free Dive)", rank: "High (Very Sustainable)",  notes: "Low bycatch, only take what you need",                       source: "DLNR DAR" },
+  { method: "Pole-and-Line / Trolling", rank: "High",                     notes: "Low bycatch, Hawaii troll fisheries well-managed",             source: "Seafood Watch Hawaii Guide" },
+  { method: "Handline",                 rank: "High",                     notes: "Very selective, minimal habitat impact",                      source: "NOAA Pacific Islands" },
+  { method: "Trap Fishing",             rank: "Medium-High",              notes: "Can be selective if properly designed",                       source: "DLNR Fishing Regulations" },
+  { method: "Longline Fishing",         rank: "Medium (varies)",          notes: "Some Hawaii longline certified sustainable, bycatch risk",    source: "NOAA Fisheries" },
+  { method: "Cast Net / Throw Net",     rank: "Medium",                   notes: "Selective when used responsibly",                             source: "Traditional Hawaiian methods" },
+  { method: "Aquaculture (farmed)",     rank: "Varies (often High)",      notes: "Reduces pressure on wild stocks",                             source: "NOAA & Hawaii Seafood Council" },
+  { method: "Diving with SCUBA",        rank: "Low-Medium",               notes: "Can lead to overfishing of deeper reefs",                     source: "Hawaii Reef Sustainability Reports" },
+  { method: "Purse Seine",              rank: "Low",                      notes: "High bycatch of non-target species",                          source: "Seafood Watch" },
+  { method: "Lay Netting / Gill Net",   rank: "Very Low",                 notes: "Highly damaging to reefs and non-target species",             source: "DLNR Regulations" },
+];
+
+// ── STATUS → BADGE mapping ──────────────────────────────────────────────────
+function statusBadge(status) {
+  const s = status.toLowerCase();
+  if (s.includes('very low'))             return ['badge-red',    status];
+  if (s.includes('low'))                  return ['badge-red',    status];
+  if (s.includes('high pressure') || s.includes('declining')) return ['badge-red', status];
+  if (s.includes('high local'))           return ['badge-orange', status];
+  if (s.includes('moderate') || s.includes('medium')) return ['badge-yellow', status];
+  if (s.includes('protected') || s.includes('healthy')) return ['badge-green', status];
+  if (s.includes('high'))                 return ['badge-orange', status];
+  return ['badge-gray', status];
+}
+
+function rankBadge(rank) {
+  const r = rank.toLowerCase();
+  if (r.includes('very low'))  return ['badge-red',    rank];
+  if (r.includes('low-medium'))return ['badge-yellow', rank];
+  if (r.includes('low'))       return ['badge-red',    rank];
+  if (r.includes('medium-high'))return ['badge-yellow',rank];
+  if (r.includes('medium'))    return ['badge-yellow', rank];
+  if (r.includes('varies'))    return ['badge-blue',   rank];
+  if (r.includes('high'))      return ['badge-green',  rank];
+  return ['badge-gray', rank];
+}
+
+function volumeBadge(vol) {
+  const v = vol.toLowerCase();
+  if (v.includes('very high')) return ['badge-red',    vol];
+  if (v.includes('high'))      return ['badge-orange', vol];
+  if (v.includes('medium'))    return ['badge-yellow', vol];
+  return ['badge-gray', vol];
+}
+
+// ── RENDER ──────────────────────────────────────────────────────────────────
+function renderCards() {
+  // Overfished
+  const oc = document.getElementById('cards-overfished');
+  oc.innerHTML = overfishedData.map(d => {
+    const [cls, label] = statusBadge(d.status);
+    return `
+      <div class="card overfished">
+        <div class="card-name">${d.area}</div>
+        <div class="card-meta"><span class="badge ${cls}">${label}</span></div>
+        <div class="card-desc">${d.reasons}</div>
+        <div class="card-source">📄 ${d.source}</div>
+      </div>`;
+  }).join('');
+
+  // Imported
+  const ic = document.getElementById('cards-imported');
+  ic.innerHTML = importedData.map(d => {
+    const [cls, label] = volumeBadge(d.volume);
+    return `
+      <div class="card imported">
+        <div class="card-name">${d.species}</div>
+        <div class="card-meta">
+          <span class="badge ${cls}">Volume: ${label}</span>
+        </div>
+        <div class="card-desc">${d.reason}</div>
+        <div class="card-source">📄 ${d.source}</div>
+      </div>`;
+  }).join('');
+
+  // Fishing methods
+  const fc = document.getElementById('cards-fishing');
+  fc.innerHTML = fishingData.map(d => {
+    const [cls, label] = rankBadge(d.rank);
+    return `
+      <div class="card fishing">
+        <div class="card-name">${d.method}</div>
+        <div class="card-meta"><span class="badge ${cls}">${label}</span></div>
+        <div class="card-desc">${d.notes}</div>
+        <div class="card-source">📄 ${d.source}</div>
+      </div>`;
+  }).join('');
+}
+
+// ── TABS ─────────────────────────────────────────────────────────────────────
+const tabs = document.querySelectorAll('.tab-btn');
+const sections = {
+  overfished: document.getElementById('sec-overfished'),
+  imported:   document.getElementById('sec-imported'),
+  fishing:    document.getElementById('sec-fishing'),
+};
+const dividers = [document.getElementById('div1'), document.getElementById('div2')];
+
+function showTab(active) {
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === active));
+
+  if (active === 'all') {
+    Object.values(sections).forEach(s => s.classList.remove('hidden'));
+    dividers.forEach(d => d.style.display = '');
+    return;
+  }
+
+  Object.entries(sections).forEach(([key, el]) => {
+    el.classList.toggle('hidden', key !== active);
+  });
+  dividers.forEach(d => d.style.display = 'none');
+}
+
+tabs.forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+renderCards();
+showTab('overfished');
+</script>
+</body>
+</html>
