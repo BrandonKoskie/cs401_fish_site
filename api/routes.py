@@ -208,8 +208,23 @@ def delete_fishing_method(entry_id):
 # ── Consumer Guide (Kamryn) ──────────────────────────────────────────────────────
 
 CONSUMER_GUIDES = [
-    {"guide_name": "Top Sustainable Poke Fish", "description": "Find enviornmentally friendly fish commonly used in poke bowls", "content": "Recommended species: Ahi, Salmon. Tip: Choose locally caught fish to reduce environmental impact. Recipe idea: Build a poke bowl with rice as a base, add cubed salmon or tuna, and optional toppings like seaweed, cucumber, and furikake for extra flavor.","filters": "poke, ahi, popular",
-        "resources": " NOAA Sustainable Seafood"},
+    {
+    "guide_name": "Top Sustainable Poke Fish",
+    "description": "Find environmentally friendly fish commonly used in poke bowls",
+    "content": """
+<p><strong>Recommended species:
+<ul>
+  <li><a href="/fish">Ahi</a></li>
+  <li><a href="/fish">Salmon</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Choose locally caught fish to reduce environmental impact.</p>
+
+<p><strong>Recipe idea:</strong> Build a poke bowl with rice as a base, add cubed salmon or tuna, and optional toppings like seaweed, cucumber, and furikake for extra flavor.</p>
+""",
+    "filters": "poke, ahi, popular",
+    "resources": "NOAA Sustainable Seafood"
+},
     {"guide_name": "Low Mercury Options for Families", "description": "Provides safe seafood choices for children and pregnant women.", "content": "Recommended species: Salmon (Low mercury), Sardines (Low mercury), Shrimp (Very low mercury), Tilapia. Tip: To avoid high-mercury fish like swordfish and bigeye tuna. Recipe idea: Grilled salmon with lemon.", "filters": "low mercury, health", "resources": "FDA Seafood Consumption"},
     {"guide_name": "Budget Friendly Healthy Seafood Options", "description": "Affordable seafood options that are healthy and widely available.", "content": "Recommended species: Canned light tuna, Sardines, Pollock. Tip: Frozen and canned options are often cheaper but still nutritious. Recipe idea: Tuna sandwich - add mayonnaise and chopped celery to canned tuna.", "filters": "budget, low cost, easy meals", "resources": "USDA Seafood Nutrition"},
     {"guide_name": "Seasonal Seafood Guide", "description": "Shows the best seasonal seafood options to support sustainable fishing.", "content": "Recommended seasonal fish: Ahi (year around), Mahi Mahi (spring and summer), Shrimp (year around). Tip: Eating in-season seafood reduces pressure on fish populations. Recipe idea: Seafood and white rice", "filters": "seasonal, fish, sustainable", "resources": "Hawaii Division of Aquatic Resources"},
