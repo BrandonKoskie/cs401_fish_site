@@ -59,14 +59,14 @@
         <!-- Search Bar -->
         <div class="row mb-4">
             <div class="col-md-6 mx-auto">
-                <input type="text" id="searchInput" class="form-control form-control-lg" 
+                <input type="text" id="searchInput" class="form-control form-control-lg"
                        placeholder="Search by name (e.g. Ahi, Mahimahi)...">
             </div>
         </div>
 
         <!-- Fish Cards Grid -->
         <div class="row" id="fishContainer">
-            <!-- Cards loaded by JavaScript -->
+            <!-- Cards will be loaded here -->
         </div>
     </div>
 
@@ -91,17 +91,19 @@
 
                     const cardHTML = `
                         <div class="col-md-4 col-lg-3 mb-4">
-                            <div class="card fish-card h-100">
-                                <img src="${fish.image_url}" class="card-img-top" alt="${fish.common_name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${fish.common_name}</h5>
-                                    <span class="badge ${ratingClass} mb-2">${fish.sustainability_rating}</span>
-                                    <p class="card-text small">${fish.health_notes}</p>
+                            <a href="/fish/${fish.id}" class="text-decoration-none">
+                                <div class="card fish-card h-100">
+                                    <img src="${fish.image_url}" class="card-img-top" alt="${fish.common_name}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${fish.common_name}</h5>
+                                        <span class="badge ${ratingClass} mb-2">${fish.sustainability_rating}</span>
+                                        <p class="card-text small">${fish.health_notes}</p>
+                                    </div>
+                                    <div class="card-footer text-muted small">
+                                        ${fish.preparation}
+                                    </div>
                                 </div>
-                                <div class="card-footer text-muted small">
-                                    ${fish.preparation}
-                                </div>
-                            </div>
+                            </a>
                         </div>
                     `;
                     container.innerHTML += cardHTML;
@@ -112,17 +114,21 @@
                 }
             } catch (error) {
                 console.error("Error loading fish:", error);
-                document.getElementById('fishContainer').innerHTML = 
-                    `<p class="text-danger text-center">Failed to load fish data.</p>`;
+                const container = document.getElementById('fishContainer');
+                if (container) container.innerHTML = `<p class="text-danger text-center">Failed to load fish data.</p>`;
             }
         }
 
-        // Load all fish when page loads
-        window.onload = () => loadFish();
+        // Run after the page is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFish();
 
-        // Live search
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            loadFish(e.target.value);
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    loadFish(e.target.value);
+                });
+            }
         });
     </script>
 

@@ -1,8 +1,12 @@
+import os
 from flask import Flask
 from api.models import db
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__,
+                static_folder='../static',      
+                static_url_path='/static')      
+
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///hawaii_seafood.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
