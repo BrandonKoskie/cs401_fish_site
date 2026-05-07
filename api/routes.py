@@ -214,64 +214,402 @@ def delete_fishing_method(entry_id):
 # ── Consumer Guide (Kamryn) ──────────────────────────────────────────────────────
 
 CONSUMER_GUIDES = [
-    {
+{
     "id": 1,
     "guide_name": "Top Sustainable Poke Fish",
-    "description": "Find environmentally friendly fish commonly used in poke bowls",
+    "description": "Environmentally friendly fish commonly used in Hawaiian poke bowls.",
     "content": """
-<p><strong>Recommended species:
+<p><strong>Recommended species:</strong>
 <ul>
   <li><a href="/fish">Ahi</a></li>
   <li><a href="/fish">Salmon</a></li>
 </ul>
 
-<p><strong>Tip:</strong> Choose locally caught fish to reduce environmental impact.</p>
+<p><strong>Tip:</strong> Choose locally caught fish to help reduce environmental impact.</p>
 
-<p><strong>Recipe idea:</strong> Build a poke bowl with rice as a base, add cubed salmon or tuna, and optional toppings like seaweed, cucumber, and furikake for extra flavor.</p>
+<p><strong>Recipe idea:</strong> Traditional poke bowl with rice, ahi tuna, seaweed, cucumber, and furikake.</p>
 """,
-    "filters": "poke, ahi, popular",
+    "filters": "poke, ahi, sustainable",
     "resources": "NOAA Sustainable Seafood"
 },
 
-    {
+{
     "id": 2,
-    "guide_name": "Low Mercury Options for Families",
-    "description": "Provides safe seafood choices for children and pregnant women.",
-    "content": "Recommended species: Salmon (Low mercury), Sardines (Low mercury), Shrimp (Very low mercury), Tilapia. Tip: To avoid high-mercury fish like swordfish and bigeye tuna. Recipe idea: Grilled salmon with lemon.",
-    "filters": "low mercury, health",
+    "guide_name": "Low Mercury Seafood for Families",
+    "description": "Safer seafood options for children and pregnant women.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Salmon</a></li>
+  <li><a href="/fish">Sardines</a></li>
+  <li><a href="/fish">Shrimp</a></li>
+  <li><a href="/fish">Tilapia</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Avoid high-mercury fish such as swordfish and bigeye tuna.</p>
+
+<p><strong>Recipe idea:</strong> Grilled salmon with lemon and island vegetables.</p>
+""",
+    "filters": "low mercury, family, health",
     "resources": "FDA Seafood Consumption"
 },
-    {
+
+{
     "id": 3,
     "guide_name": "Budget Friendly Healthy Seafood Options",
-    "description": "Affordable seafood options that are healthy and widely available.",
-    "content": "Recommended species: Canned light tuna, Sardines, Pollock. Tip: Frozen and canned options are often cheaper but still nutritious. Recipe idea: Tuna sandwich - add mayonnaise and chopped celery to canned tuna.",
-    "filters": "budget, low cost, easy meals",
+    "description": "Affordable seafood choices that are healthy and easy to prepare.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Canned Light Tuna</a></li>
+  <li><a href="/fish">Sardines</a></li>
+  <li><a href="/fish">Pollock</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Frozen and canned seafood can still provide strong nutritional value.</p>
+
+<p><strong>Recipe idea:</strong> Tuna sandwich with celery, mayonnaise, and lettuce.</p>
+""",
+    "filters": "budget, healthy, easy meals",
     "resources": "USDA Seafood Nutrition"
 },
-    {
+
+{
     "id": 4,
     "guide_name": "Seasonal Seafood Guide",
-    "description": "Shows the best seasonal seafood options to support sustainable fishing.",
-    "content": "Recommended seasonal fish: Ahi (year around), Mahi Mahi (spring and summer), Shrimp (year around). Tip: Eating in-season seafood reduces pressure on fish populations. Recipe idea: Seafood and white rice",
-    "filters": "seasonal, fish, sustainable",
+    "description": "Popular Hawaiian seafood choices based on seasonal availability.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Ahi</a> (year-round)</li>
+  <li><a href="/fish">Mahi-Mahi</a> (spring and summer)</li>
+  <li><a href="/fish">Shrimp</a> (year-round)</li>
+</ul>
+
+<p><strong>Tip:</strong> Eating seasonal seafood can help support sustainable fishing practices.</p>
+
+<p><strong>Recipe idea:</strong> Grilled mahi-mahi served with white rice and vegetables.</p>
+""",
+    "filters": "seasonal, sustainable, seafood",
     "resources": "Hawaii Division of Aquatic Resources"
 },
-    {
+
+{
     "id": 5,
     "guide_name": "Beginner’s Guide to Sustainable Seafood",
-    "description": "Introduces beginners to making seafood choices.",
-    "content": "Recommended species: Salmon, Tuna, Shrimp. Tip: Look for seafood certified by sustainability programs. Recipe idea: Simple baked salmon with vegetables.",
+    "description": "An introduction to choosing sustainable seafood options in Hawaii.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Salmon</a></li>
+  <li><a href="/fish">Tuna</a></li>
+  <li><a href="/fish">Shrimp</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Look for seafood certified by sustainability programs whenever possible.</p>
+
+<p><strong>Recipe idea:</strong> Simple baked salmon with rice and vegetables.</p>
+""",
     "filters": "beginner, sustainable, easy",
     "resources": "Seafood Beginner Guide"
 },
-    {
+
+{
     "id": 6,
     "guide_name": "Healthy Grilling & Cooking Seafood Guide",
-    "description": "Healthy cooking methods for seafood and seafood preparation techniques.",
-    "content": "Recommended species: Salmon, Mahi-Mahi, Shrimp. Tip: Grilling and baking preserve nutrients and reduce added fats. Recipe idea: Grilled mahi-mahi tacos with cabbage slaw.",
-    "filters": "cooked, grilling, recipes",
+    "description": "Healthy cooking methods commonly used for seafood preparation.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Salmon</a></li>
+  <li><a href="/fish">Mahi-Mahi</a></li>
+  <li><a href="/fish">Shrimp</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Grilling and baking seafood can help preserve nutrients while reducing added fats.</p>
+
+<p><strong>Recipe idea:</strong> Grilled mahi-mahi tacos with cabbage slaw.</p>
+""",
+    "filters": "grilling, cooking, recipes",
     "resources": "NOAA Cooking Guide"
+},
+
+{
+    "id": 7,
+    "guide_name": "Best Fish for Hawaiian Poke Bowls",
+    "description": "Popular seafood choices commonly used in traditional Hawaiian poke.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Ahi Tuna</a></li>
+  <li><a href="/fish">Salmon</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Fresh sushi-grade seafood is best for poke preparation.</p>
+
+<p><strong>Recipe idea:</strong> Shoyu ahi poke with sesame oil, green onion, and furikake.</p>
+""",
+    "filters": "poke, local favorites, hawaiian",
+    "resources": "Hawaii Seafood Council"
+},
+
+{
+    "id": 8,
+    "guide_name": "Seasonal Seafood Favorites in Hawaii",
+    "description": "Discover seafood species commonly available during different seasons in Hawaii.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Mahi-Mahi</a> (spring/summer)</li>
+  <li><a href="/fish">Aku</a> (summer)</li>
+  <li><a href="/fish">Ahi</a> (year-round)</li>
+</ul>
+
+<p><strong>Tip:</strong> Seasonal seafood is often fresher and more sustainable.</p>
+
+<p><strong>Recipe idea:</strong> Grilled mahi-mahi with island vegetables.</p>
+""",
+    "filters": "seasonal, sustainable, local",
+    "resources": "Hawaii Division of Aquatic Resources"
+},
+
+{
+    "id": 9,
+    "guide_name": "Low Mercury Seafood in Hawaii",
+    "description": "Safer seafood choices for families, children, and pregnant women.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Salmon</a></li>
+  <li><a href="/fish">Shrimp</a></li>
+  <li><a href="/fish">Sardines</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Avoid large predatory fish with higher mercury levels.</p>
+
+<p><strong>Recipe idea:</strong> Garlic shrimp plate with rice.</p>
+""",
+    "filters": "low mercury, health, family",
+    "resources": "FDA Seafood Advice"
+},
+
+{
+    "id": 10,
+    "guide_name": "Guide to Sustainable Hawaiian Seafood",
+    "description": "Learn how to make environmentally responsible seafood choices in Hawaii.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Mahi-Mahi</a></li>
+  <li><a href="/fish">Opah</a></li>
+  <li><a href="/fish">Farmed shellfish</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Buying sustainable seafood helps protect Hawaiian marine ecosystems.</p>
+
+<p><strong>Recipe idea:</strong> Pan-seared opah with steamed vegetables.</p>
+""",
+    "filters": "sustainable, environment, local",
+    "resources": "Seafood Watch"
+},
+
+{
+    "id": 11,
+    "guide_name": "Local Hawaiian Seafood Plate Favorites",
+    "description": "Seafood dishes that are popular in Hawaii’s local food culture.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Shrimp</a></li>
+  <li><a href="/fish">Ahi</a></li>
+  <li><a href="/fish">Mahi-Mahi</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Support local restaurants that source seafood responsibly.</p>
+
+<p><strong>Recipe idea:</strong> North Shore style garlic shrimp.</p>
+""",
+    "filters": "local food, recipes, hawaii",
+    "resources": "Hawaii Food Guide"
+},
+
+{
+    "id": 12,
+    "guide_name": "Best Seafood for Grilling in Hawaii",
+    "description": "Seafood species that are commonly grilled in Hawaiian cooking.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Mahi-Mahi</a></li>
+  <li><a href="/fish">Opah</a></li>
+  <li><a href="/fish">Salmon</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Marinating seafood before grilling can enhance flavor and moisture.</p>
+
+<p><strong>Recipe idea:</strong> Teriyaki grilled mahi-mahi.</p>
+""",
+    "filters": "grilling, recipes, seafood",
+    "resources": "NOAA Cooking Guide"
+},
+
+{
+    "id": 13,
+    "guide_name": "Guide to Hawaiian Reef Fish",
+    "description": "Learn about common reef fish found in Hawaiian waters.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Uhu</a></li>
+  <li><a href="/fish">Manini</a></li>
+  <li><a href="/fish">Moano</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Some reef fish populations are sensitive to overfishing.</p>
+
+<p><strong>Recipe idea:</strong> Lightly grilled reef fish with lemon.</p>
+""",
+    "filters": "reef fish, local species",
+    "resources": "Hawaii Marine Biology Program"
+},
+
+{
+    "id": 14,
+    "guide_name": "Fresh Fish Market Buying Guide",
+    "description": "Tips for choosing fresh seafood at Hawaiian fish markets.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Ahi</a></li>
+  <li><a href="/fish">Mahi-Mahi</a></li>
+  <li><a href="/fish">Opah</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Ask vendors when and where the fish was caught.</p>
+
+<p><strong>Recipe idea:</strong> Fresh catch fish tacos.</p>
+""",
+    "filters": "market, fresh seafood",
+    "resources": "FDA Seafood Safety"
+},
+
+{
+    "id": 15,
+    "guide_name": "Guide to Raw Seafood Safety",
+    "description": "Important safety tips for enjoying poke and sashimi safely.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Sushi-grade Ahi</a></li>
+  <li><a href="/fish">Sushi-grade Salmon</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Keep raw seafood refrigerated and consume it quickly.</p>
+
+<p><strong>Recipe idea:</strong> Spicy ahi poke bowl.</p>
+""",
+    "filters": "raw seafood, poke, safety",
+    "resources": "FDA Raw Seafood Guidelines"
+},
+
+{
+    "id": 16,
+    "guide_name": "Popular Seafood in Hawaiian Cuisine",
+    "description": "Seafood ingredients commonly used in traditional Hawaiian dishes.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Ahi</a></li>
+  <li><a href="/fish">Opihi</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Hawaiian cuisine often focuses on fresh and simple ingredients.</p>
+
+<p><strong>Recipe idea:</strong> Traditional limu poke bowl.</p>
+""",
+    "filters": "hawaiian food, local seafood",
+    "resources": "Hawaii Culinary Institute"
+},
+
+{
+    "id": 17,
+    "guide_name": "How Overfishing Impacts Hawaii",
+    "description": "Learn how overfishing affects Hawaiian marine ecosystems and seafood supply.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Mahi-Mahi</a></li>
+  <li><a href="/fish">Opah</a></li>
+  <li><a href="/fish">Shrimp</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Choosing sustainable seafood helps protect Hawaii’s oceans.</p>
+
+<p><strong>Recipe idea:</strong> Sustainable fish tacos with island slaw.</p>
+""",
+    "filters": "overfishing, sustainability",
+    "resources": "NOAA Fisheries"
+},
+
+{
+    "id": 18,
+    "guide_name": "Best Seafood for Hawaiian Family Gatherings",
+    "description": "Seafood dishes commonly shared during Hawaiian family meals and gatherings.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Ahi</a></li>
+  <li><a href="/fish">Shrimp</a></li>
+  <li><a href="/fish">Mahi-Mahi</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Family-style seafood meals are a major part of local food culture.</p>
+
+<p><strong>Recipe idea:</strong> Mixed seafood platter with rice and macaroni salad.</p>
+""",
+    "filters": "family, recipes, local culture",
+    "resources": "Hawaii Local Food Network"
+},
+
+{
+    "id": 19,
+    "guide_name": "Guide to Hawaiian Deep Sea Fish",
+    "description": "Deep sea fish species commonly caught in Hawaiian waters.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Onaga</a></li>
+  <li><a href="/fish">Monchong</a></li>
+  <li><a href="/fish">Opah</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Deep sea fish are known for rich flavor and high quality fillets.</p>
+
+<p><strong>Recipe idea:</strong> Grilled monchong with garlic butter.</p>
+""",
+    "filters": "deep sea, hawaiian fish",
+    "resources": "Hawaii Longline Association"
+},
+
+{
+    "id": 20,
+    "guide_name": "Responsible Seafood Tourism in Hawaii",
+    "description": "Tips for visitors who want to enjoy seafood responsibly while visiting Hawaii.",
+    "content": """
+<p><strong>Recommended species:</strong>
+<ul>
+  <li><a href="/fish">Ahi</a></li>
+  <li><a href="/fish">Mahi-Mahi</a></li>
+  <li><a href="/fish">Opah</a></li>
+</ul>
+
+<p><strong>Tip:</strong> Responsible seafood choices help preserve Hawaii’s marine ecosystems.</p>
+
+<p><strong>Recipe idea:</strong> Local catch plate lunch with seasonal fish.</p>
+""",
+    "filters": "tourism, sustainable seafood",
+    "resources": "Hawaii Tourism Authority"
+
 }]
 
 @api_bp.route('/api/consumer-guides', methods=['GET'])
