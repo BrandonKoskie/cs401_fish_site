@@ -12,7 +12,7 @@ def create_app():
 
     db.init_app(app)
 
-    from api.models import OverfishedArea, ImportedSpecies, FishingMethod  # noqa
+    from api.models import OverfishedArea, ImportedSpecies, FishingMethod # noqa
     from api.routes import api_bp
     app.register_blueprint(api_bp)
 

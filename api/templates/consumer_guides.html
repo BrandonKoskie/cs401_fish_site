@@ -39,77 +39,85 @@
     <p>Healthy • Sustainable • Affordable Choices</p>
 </div>
 
-
-<div class="container mt-4 text-center">
-
-    <button class="btn btn-outline-primary m-1" onclick="showGuide('poke')">
-        Top Sustainable Poke Fish
-    </button>
-
-    <button class="btn btn-outline-primary m-1" onclick="showGuide('mercury')">
-        Low Mercury Options
-    </button>
-
-    <button class="btn btn-outline-primary m-1" onclick="showGuide('budget')">
-        Budget Friendly
-    </button>
-
-    <button class="btn btn-outline-primary m-1" onclick="showGuide('seasonal')">
-        Seasonal Guide
-    </button>
-
-    <button class="btn btn-outline-primary m-1" onclick="showGuide('beginner')">
-        Beginner’s Guide
-    </button>
-
-    <button class="btn btn-outline-primary m-1" onclick="showGuide('healthy')">
-        Healthy Cooking
-    </button>
-
 <div class="container mt-5">
-    <div class="row" id="guidesContainer"></div>
+
+    {% if guide %}
+
+        <!-- SINGLE GUIDE PAGE -->
+
+        <a href="/guides" class="btn btn-secondary mb-4">
+            ← Back to Guides
+        </a>
+
+        <div class="card shadow-sm p-4">
+
+            <h1>{{ guide.guide_name }}</h1>
+
+            <p class="lead">
+                {{ guide.description }}
+            </p>
+
+            <hr>
+
+            <div>
+                {{ guide.content | safe }}
+            </div>
+
+            <hr>
+
+            <p>
+                <strong>Resources:</strong>
+                {{ guide.resources }}
+            </p>
+
+        </div>
+
+    {% else %}
+
+        <!-- ALL GUIDE CARDS -->
+
+        <div class="row" id="guideContainer"></div>
+
+    {% endif %}
+
 </div>
 
 <script>
+    async function loadGuides() {
+        const container = document.getElementById('guideContainer');
 
-let guides = [];
+        try {
+            const response = await fetch('/api/consumer-guides');
+            const guideList = await response.json();
 
+            container.innerHTML = '';
 
-async function loadGuides() {
-    const res = await fetch('/api/consumer-guides');
-    guides = await res.json();
-}
-
-
-function showGuide(keyword) {
-
-    const found = guides.find(g =>
-        g.guide_name.toLowerCase().includes(keyword)
-        || g.filters.toLowerCase().includes(keyword)
-    );
-
-    const container = document.getElementById('guidesContainer');
-
-    if (found) {
-        container.innerHTML = `
-            <div class="col-md-8 mx-auto">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">${found.guide_name}</h5>
-                        <p class="card-text">${found.description}</p>
-                        <p class="card-text">${found.content}</p>
+            guideList.forEach(guide => {
+                container.innerHTML += `
+                    <div class="col-md-4 mb-4">
+                        <a href="/guides/${guide.id}" class="text-decoration-none text-dark">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5>${guide.guide_name}</h5>
+                                    <p>${guide.description}</p>
+                                </div>
+                                <div class="card-footer">
+                                    View Guide
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            </div>
-        `;
+                `;
+            });
+
+        } catch (error) {
+            console.error(error);
+            container.innerHTML = '<p class="text-danger">Failed to load guide data.</p>';
+        }
     }
-}
 
-
-loadGuides();
-
+    document.addEventListener('DOMContentLoaded', loadGuides);
 </script>
 
 </body>
 </html>
-

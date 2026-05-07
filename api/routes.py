@@ -215,6 +215,7 @@ def delete_fishing_method(entry_id):
 
 CONSUMER_GUIDES = [
     {
+    "id": 1,
     "guide_name": "Top Sustainable Poke Fish",
     "description": "Find environmentally friendly fish commonly used in poke bowls",
     "content": """
@@ -231,12 +232,47 @@ CONSUMER_GUIDES = [
     "filters": "poke, ahi, popular",
     "resources": "NOAA Sustainable Seafood"
 },
-    {"guide_name": "Low Mercury Options for Families", "description": "Provides safe seafood choices for children and pregnant women.", "content": "Recommended species: Salmon (Low mercury), Sardines (Low mercury), Shrimp (Very low mercury), Tilapia. Tip: To avoid high-mercury fish like swordfish and bigeye tuna. Recipe idea: Grilled salmon with lemon.", "filters": "low mercury, health", "resources": "FDA Seafood Consumption"},
-    {"guide_name": "Budget Friendly Healthy Seafood Options", "description": "Affordable seafood options that are healthy and widely available.", "content": "Recommended species: Canned light tuna, Sardines, Pollock. Tip: Frozen and canned options are often cheaper but still nutritious. Recipe idea: Tuna sandwich - add mayonnaise and chopped celery to canned tuna.", "filters": "budget, low cost, easy meals", "resources": "USDA Seafood Nutrition"},
-    {"guide_name": "Seasonal Seafood Guide", "description": "Shows the best seasonal seafood options to support sustainable fishing.", "content": "Recommended seasonal fish: Ahi (year around), Mahi Mahi (spring and summer), Shrimp (year around). Tip: Eating in-season seafood reduces pressure on fish populations. Recipe idea: Seafood and white rice", "filters": "seasonal, fish, sustainable", "resources": "Hawaii Division of Aquatic Resources"},
-    {"guide_name": "Beginner’s Guide to Sustainable Seafood", "description": "Introduces beginners to making seafood choices.", "content": "Recommended species: Salmon, Tuna, Shrimp. Tip: Look for seafood certified by sustainability programs. Recipe idea: Simple baked salmon with vegetables.", "filters": "beginner, sustainable, easy", "resources": "Seafood Beginner Guide"},
-    {"guide_name": "Healthy Grilling & Cooking Seafood Guide", "description": "Healthy cooking methods for seafood and seafood preparation techniques.", "content": "Recommended species: Salmon, Mahi-Mahi, Shrimp. Tip: Grilling and baking preserve nutrients and reduce added fats. Recipe idea: Grilled mahi-mahi tacos with cabbage slaw.", "filters": "cooked, grilling, recipes", "resources": "NOAA Cooking Guide"}
-]
+
+    {
+    "id": 2,
+    "guide_name": "Low Mercury Options for Families",
+    "description": "Provides safe seafood choices for children and pregnant women.",
+    "content": "Recommended species: Salmon (Low mercury), Sardines (Low mercury), Shrimp (Very low mercury), Tilapia. Tip: To avoid high-mercury fish like swordfish and bigeye tuna. Recipe idea: Grilled salmon with lemon.",
+    "filters": "low mercury, health",
+    "resources": "FDA Seafood Consumption"
+},
+    {
+    "id": 3,
+    "guide_name": "Budget Friendly Healthy Seafood Options",
+    "description": "Affordable seafood options that are healthy and widely available.",
+    "content": "Recommended species: Canned light tuna, Sardines, Pollock. Tip: Frozen and canned options are often cheaper but still nutritious. Recipe idea: Tuna sandwich - add mayonnaise and chopped celery to canned tuna.",
+    "filters": "budget, low cost, easy meals",
+    "resources": "USDA Seafood Nutrition"
+},
+    {
+    "id": 4,
+    "guide_name": "Seasonal Seafood Guide",
+    "description": "Shows the best seasonal seafood options to support sustainable fishing.",
+    "content": "Recommended seasonal fish: Ahi (year around), Mahi Mahi (spring and summer), Shrimp (year around). Tip: Eating in-season seafood reduces pressure on fish populations. Recipe idea: Seafood and white rice",
+    "filters": "seasonal, fish, sustainable",
+    "resources": "Hawaii Division of Aquatic Resources"
+},
+    {
+    "id": 5,
+    "guide_name": "Beginner’s Guide to Sustainable Seafood",
+    "description": "Introduces beginners to making seafood choices.",
+    "content": "Recommended species: Salmon, Tuna, Shrimp. Tip: Look for seafood certified by sustainability programs. Recipe idea: Simple baked salmon with vegetables.",
+    "filters": "beginner, sustainable, easy",
+    "resources": "Seafood Beginner Guide"
+},
+    {
+    "id": 6,
+    "guide_name": "Healthy Grilling & Cooking Seafood Guide",
+    "description": "Healthy cooking methods for seafood and seafood preparation techniques.",
+    "content": "Recommended species: Salmon, Mahi-Mahi, Shrimp. Tip: Grilling and baking preserve nutrients and reduce added fats. Recipe idea: Grilled mahi-mahi tacos with cabbage slaw.",
+    "filters": "cooked, grilling, recipes",
+    "resources": "NOAA Cooking Guide"
+}]
 
 @api_bp.route('/api/consumer-guides', methods=['GET'])
 def get_all_consumer_guides():
@@ -297,3 +333,12 @@ def delete_consumer_guide(guide_id):
         return jsonify({"error": f"No guide found with id={guide_id}"}), 404
 
     return jsonify({"message": f"Guide {guide_id} deleted"}), 200 
+
+@api_bp.route('/guides/<int:guide_id>')
+def guide_page(guide_id):
+    guide = next((g for g in CONSUMER_GUIDES if g.get("id") == guide_id), None)
+
+    if not guide:
+        return "Guide not found", 404
+
+    return render_template("consumer_guides.html", guide=guide)
