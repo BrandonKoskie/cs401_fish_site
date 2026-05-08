@@ -48,7 +48,7 @@ def create_app():
         
         # Check if database is empty and seed it
         if OverfishedArea.query.count() == 0:
-            from seed import OVERFISHED_AREAS, IMPORTED_SPECIES, FISHING_METHODS
+            from seed_data import OVERFISHED_AREAS, IMPORTED_SPECIES, FISHING_METHODS
             for item in OVERFISHED_AREAS:
                 db.session.add(OverfishedArea(**item))
             for item in IMPORTED_SPECIES:
