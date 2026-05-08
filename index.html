@@ -1,0 +1,59 @@
+<section class="hero-banner">
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <h1>Explore the Depths</h1>
+            <p>Discover species, track habitats, and dive into our aquatic database.</p>
+            <a href="#explore" class="btn-primary">Get Started</a>
+        </div>
+    </div>
+</section>
+.hero-banner {
+    height: 60vh; /* Adjust height as needed */
+    background-image: url('https://images.unsplash.com/photo-1524704659690-3f7a3e1c9263?q=80&w=2000'); /* Replace with your fish image */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+/* Dark blue overlay to make text pop and match the theme */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 43, 54, 0.8) 0%, rgba(7, 54, 66, 0.4) 100%);
+}
+
+.hero-content {
+    position: relative; /* Sits above the overlay */
+    z-index: 2;
+    padding: 20px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #2aa198; /* Seafoam/Teal color */
+    color: white;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 50px; /* Rounded for a fluid, organic feel */
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    background-color: #45c4ba;
+}

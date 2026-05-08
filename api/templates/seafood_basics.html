@@ -18,16 +18,20 @@
             text-align: center;
         }
 
-        /* ── Section tabs ── */
+        /* Section tabs */
         .section-btn {
             border-radius: 25px;
             margin: 4px;
             font-weight: 600;
             font-size: 0.85rem;
+            transition: all 0.3s ease;
         }
-        .section-btn.active { box-shadow: 0 0 0 3px rgba(255,255,255,0.6); }
+        .section-btn.active { 
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.6);
+            transform: scale(1.05);
+        }
 
-        /* ── Cards ── */
+        /* Cards */
         .basics-card {
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             border: none;
@@ -47,18 +51,18 @@
             padding: 8px 16px;
         }
 
-        /* ── Status badges for overfished areas ── */
+        /* Status badges for overfished areas */
         .status-high    { background-color: #dc3545; color: white; }
         .status-medium  { background-color: #fd7e14; color: white; }
         .status-low     { background-color: #28a745; color: white; }
 
-        /* ── Sustainability rank colors ── */
+        /* Sustainability rank colors */
         .rank-high   { background-color: #d4edda; color: #155724; }
         .rank-medium { background-color: #fff3cd; color: #856404; }
         .rank-low    { background-color: #f8d7da; color: #721c24; }
         .rank-varies { background-color: #d1ecf1; color: #0c5460; }
 
-        /* ── Volume badges ── */
+        /* Volume badges */
         .vol-very-high { background-color: #dc3545; color: white; }
         .vol-high      { background-color: #fd7e14; color: white; }
         .vol-medium    { background-color: #ffc107; color: #333; }
@@ -71,6 +75,11 @@
         .section-header.overfished { border-color: #dc3545; }
         .section-header.imported   { border-color: #fd7e14; }
         .section-header.methods    { border-color: #0d6efd; }
+        
+        .section-divider {
+            border-top: 2px solid #dee2e6;
+            margin: 40px 0;
+        }
     </style>
 </head>
 <body>
@@ -115,7 +124,7 @@
 
     <div class="container mt-5">
 
-        <!-- ── OVERFISHED AREAS ── -->
+        <!-- OVERFISHED AREAS -->
         <div id="section-overfished">
             <div class="section-header overfished">
                 <h2 class="fw-bold mb-0">🐟 Overfished Areas in Hawaii</h2>
@@ -129,9 +138,9 @@
             </div>
         </div>
 
-        <hr class="my-5">
+        <hr class="section-divider" id="divider-1">
 
-        <!-- ── IMPORTED SPECIES ── -->
+        <!-- IMPORTED SPECIES -->
         <div id="section-imported">
             <div class="section-header imported">
                 <h2 class="fw-bold mb-0">📦 Imported Seafood Species</h2>
@@ -145,9 +154,9 @@
             </div>
         </div>
 
-        <hr class="my-5">
+        <hr class="section-divider" id="divider-2">
 
-        <!-- ── FISHING METHODS ── -->
+        <!-- FISHING METHODS -->
         <div id="section-methods">
             <div class="section-header methods">
                 <h2 class="fw-bold mb-0">🎣 Fishing Methods & Sustainability</h2>
@@ -170,27 +179,51 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-
-        // ── Section toggle ──────────────────────────────────────────────
+        // Section toggle - IMPROVED VERSION
         function showSection(name, btn) {
+            // Remove active class from all buttons
             document.querySelectorAll('.section-btn').forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
             btn.classList.add('active');
 
-            const sections = ['overfished', 'imported', 'methods'];
-            sections.forEach(s => {
-                const el = document.getElementById('section-' + s);
-                const hr = el.nextElementSibling;
-                if (name === 'all' || name === s) {
-                    el.style.display = 'block';
-                    if (hr && hr.tagName === 'HR') hr.style.display = 'block';
-                } else {
-                    el.style.display = 'none';
-                    if (hr && hr.tagName === 'HR') hr.style.display = 'none';
+            const sections = {
+                'overfished': document.getElementById('section-overfished'),
+                'imported': document.getElementById('section-imported'),
+                'methods': document.getElementById('section-methods')
+            };
+            
+            const dividers = {
+                'divider-1': document.getElementById('divider-1'),
+                'divider-2': document.getElementById('divider-2')
+            };
+
+            if (name === 'all') {
+                // Show everything
+                Object.values(sections).forEach(el => el.style.display = 'block');
+                Object.values(dividers).forEach(el => el.style.display = 'block');
+            } else {
+                // Hide everything first
+                Object.values(sections).forEach(el => el.style.display = 'none');
+                Object.values(dividers).forEach(el => el.style.display = 'none');
+                
+                // Show only the selected section
+                sections[name].style.display = 'block';
+                
+                // Show appropriate dividers
+                if (name === 'overfished') {
+                    dividers['divider-1'].style.display = 'block';
+                } else if (name === 'imported') {
+                    dividers['divider-1'].style.display = 'block';
+                    dividers['divider-2'].style.display = 'block';
+                } else if (name === 'methods') {
+                    dividers['divider-2'].style.display = 'block';
                 }
-            });
+            }
+
+            console.log('Showing section:', name);
         }
 
-        // ── Status badge helper ─────────────────────────────────────────
+        // Status badge helper
         function statusBadge(status) {
             const s = status.toLowerCase();
             if (s.includes('healthy') || s.includes('protected')) return `<span class="badge status-low">${status}</span>`;
@@ -198,7 +231,7 @@
             return `<span class="badge status-high">${status}</span>`;
         }
 
-        // ── Rank badge helper ───────────────────────────────────────────
+        // Rank badge helper
         function rankBadge(rank) {
             const r = rank.toLowerCase();
             if (r.includes('very low') || r.includes('low')) return `<span class="badge rank-low">${rank}</span>`;
@@ -207,7 +240,7 @@
             return `<span class="badge rank-high">${rank}</span>`;
         }
 
-        // ── Volume badge helper ─────────────────────────────────────────
+        // Volume badge helper
         function volumeBadge(vol) {
             const v = vol.toLowerCase();
             if (v.includes('very high')) return `<span class="badge vol-very-high">${vol}</span>`;
@@ -215,90 +248,124 @@
             return `<span class="badge vol-medium">${vol}</span>`;
         }
 
-        // ── Load Overfished Areas ───────────────────────────────────────
+        // Load Overfished Areas
         async function loadOverfished() {
-            const res  = await fetch('/api/overfished-areas');
-            const data = await res.json();
-            const container = document.getElementById('overfished-container');
-            container.innerHTML = '';
-
-            data.overfished_areas.forEach(area => {
-                container.innerHTML += `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card basics-card shadow-sm">
-                            <div class="card-header bg-danger text-white">Overfished Area</div>
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">${area.area}</h5>
-                                <div class="mb-2">${statusBadge(area.overfishing_status)}</div>
-                                <p class="card-text text-muted small">${area.main_reasons}</p>
+            try {
+                const res  = await fetch('/api/overfished-areas');
+                const data = await res.json();
+                const container = document.getElementById('overfished-container');
+                
+                if (!data.overfished_areas || data.overfished_areas.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center py-3"><p class="text-muted">No overfished areas data available.</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                data.overfished_areas.forEach(area => {
+                    container.innerHTML += `
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card basics-card shadow-sm">
+                                <div class="card-header bg-danger text-white">Overfished Area</div>
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">${area.area}</h5>
+                                    <div class="mb-2">${statusBadge(area.overfishing_status)}</div>
+                                    <p class="card-text text-muted small">${area.main_reasons}</p>
+                                </div>
+                                <div class="card-footer text-muted small">
+                                    📚 Source: ${area.source_link || 'N/A'}
+                                </div>
                             </div>
-                            <div class="card-footer text-muted small">
-                                📚 Source: ${area.source_link || 'N/A'}
-                            </div>
-                        </div>
-                    </div>`;
-            });
+                        </div>`;
+                });
+            } catch (error) {
+                console.error('Error loading overfished areas:', error);
+                document.getElementById('overfished-container').innerHTML = 
+                    '<div class="col-12 text-center py-3"><p class="text-danger">Failed to load data. Please try again later.</p></div>';
+            }
         }
 
-        // ── Load Imported Species ───────────────────────────────────────
+        // Load Imported Species
         async function loadImported() {
-            const res  = await fetch('/api/imported-species');
-            const data = await res.json();
-            const container = document.getElementById('imported-container');
-            container.innerHTML = '';
-
-            data.imported_species.forEach(sp => {
-                container.innerHTML += `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card basics-card shadow-sm">
-                            <div class="card-header bg-warning text-dark">Imported Species</div>
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">${sp.species}</h5>
-                                <div class="mb-2">
-                                    <span class="text-muted small me-1">Import Volume:</span>
-                                    ${volumeBadge(sp.annual_import_volume)}
+            try {
+                const res  = await fetch('/api/imported-species');
+                const data = await res.json();
+                const container = document.getElementById('imported-container');
+                
+                if (!data.imported_species || data.imported_species.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center py-3"><p class="text-muted">No imported species data available.</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                data.imported_species.forEach(sp => {
+                    container.innerHTML += `
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card basics-card shadow-sm">
+                                <div class="card-header bg-warning text-dark">Imported Species</div>
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">${sp.species}</h5>
+                                    <div class="mb-2">
+                                        <span class="text-muted small me-1">Import Volume:</span>
+                                        ${volumeBadge(sp.annual_import_volume)}
+                                    </div>
+                                    <p class="card-text text-muted small">${sp.main_reason}</p>
                                 </div>
-                                <p class="card-text text-muted small">${sp.main_reason}</p>
+                                <div class="card-footer text-muted small">
+                                    📚 Source: ${sp.source_link || 'N/A'}
+                                </div>
                             </div>
-                            <div class="card-footer text-muted small">
-                                📚 Source: ${sp.source_link || 'N/A'}
-                            </div>
-                        </div>
-                    </div>`;
-            });
+                        </div>`;
+                });
+            } catch (error) {
+                console.error('Error loading imported species:', error);
+                document.getElementById('imported-container').innerHTML = 
+                    '<div class="col-12 text-center py-3"><p class="text-danger">Failed to load data. Please try again later.</p></div>';
+            }
         }
 
-        // ── Load Fishing Methods ────────────────────────────────────────
+        // Load Fishing Methods
         async function loadMethods() {
-            const res  = await fetch('/api/fishing-methods');
-            const data = await res.json();
-            const container = document.getElementById('methods-container');
-            container.innerHTML = '';
-
-            data.fishing_methods.forEach(m => {
-                container.innerHTML += `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card basics-card shadow-sm">
-                            <div class="card-header bg-primary text-white">Fishing Method</div>
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">${m.method}</h5>
-                                <div class="mb-2">
-                                    <span class="text-muted small me-1">Sustainability:</span>
-                                    ${rankBadge(m.sustainability_rank)}
+            try {
+                const res  = await fetch('/api/fishing-methods');
+                const data = await res.json();
+                const container = document.getElementById('methods-container');
+                
+                if (!data.fishing_methods || data.fishing_methods.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center py-3"><p class="text-muted">No fishing methods data available.</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                data.fishing_methods.forEach(m => {
+                    container.innerHTML += `
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card basics-card shadow-sm">
+                                <div class="card-header bg-primary text-white">Fishing Method</div>
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">${m.method}</h5>
+                                    <div class="mb-2">
+                                        <span class="text-muted small me-1">Sustainability:</span>
+                                        ${rankBadge(m.sustainability_rank)}
+                                    </div>
+                                    <p class="card-text text-muted small">${m.description}</p>
+                                    <p class="card-text small"><strong>Why:</strong> ${m.key_reasons}</p>
                                 </div>
-                                <p class="card-text text-muted small">${m.description}</p>
-                                <p class="card-text small"><strong>Why:</strong> ${m.key_reasons}</p>
+                                <div class="card-footer text-muted small">
+                                    📚 Source: ${m.source_link || 'N/A'}
+                                </div>
                             </div>
-                            <div class="card-footer text-muted small">
-                                📚 Source: ${m.source_link || 'N/A'}
-                            </div>
-                        </div>
-                    </div>`;
-            });
+                        </div>`;
+                });
+            } catch (error) {
+                console.error('Error loading fishing methods:', error);
+                document.getElementById('methods-container').innerHTML = 
+                    '<div class="col-12 text-center py-3"><p class="text-danger">Failed to load data. Please try again later.</p></div>';
+            }
         }
 
-        // ── Init ────────────────────────────────────────────────────────
+        // Initialize - load all data when page loads
         window.onload = () => {
+            console.log('Page loaded, fetching data...');
             loadOverfished();
             loadImported();
             loadMethods();

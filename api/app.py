@@ -3,12 +3,18 @@ from flask import Flask
 from api.models import db
 
 def create_app():
+    # Use absolute path to database
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    instance_path = os.path.join(os.path.dirname(basedir), 'instance')
+    db_path = os.path.join(instance_path, 'hawaii_seafood.db')
+    
     app = Flask(__name__,
                 static_folder='../static',      
                 static_url_path='/static')      
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///hawaii_seafood.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["INSTANCE_PATH"] = instance_path
 
     db.init_app(app)
 

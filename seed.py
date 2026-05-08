@@ -46,8 +46,8 @@ CONSUMER_GUIDES = [
 ]
 
 with app.app_context():
-    db.drop_all()
-    db.create_all()
+    # db.drop_all()  # COMMENTED OUT - was destroying data
+    # db.create_all()  # COMMENTED OUT - was destroying data
     for item in OVERFISHED_AREAS:
         db.session.add(OverfishedArea(**item))
     for item in IMPORTED_SPECIES:
