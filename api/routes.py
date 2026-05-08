@@ -8,23 +8,55 @@ api_bp = Blueprint('api', __name__)
 
 @api_bp.route('/')
 def home_page():
+    """
+    Render the homepage of the Hawaii Seafood Guide.
+
+    Returns:
+        str: Rendered HTML template for the home page.
+    """
     return render_template('home.html')
+
+
 
 @api_bp.route('/about')
 def about_page():
+    """
+    Render the About page showing team member information.
+
+    Returns:
+        str: Rendered HTML template for the about page.
+    """
     return render_template('about.html')
 
 @api_bp.route('/guides')
 def guides_page():
+    """
+    Render the Consumer Guides page.
+
+    Returns:
+        str: Rendered HTML template for the consumer guides page.
+    """
     return render_template('consumer_guides.html')
 
 @api_bp.route('/basics')
 def basics_page():
+    """
+    Render the Seafood Basics page.
+
+    Returns:
+        str: Rendered HTML template for the seafood basics page.
+    """
     return render_template('seafood_basics.html')
 
 @api_bp.route('/fish')
 def fish_page():
-    return render_template('local_fish.html',)
+    """
+    Render the Fish Species page.
+
+    Returns:
+        str: Rendered HTML template for the local fish page.
+    """
+    return render_template('local_fish.html')
 
 fish_species = [
     {"id": 1, "common_name": "Ahi", "scientific_name": "Thunnus albacares", "sustainability_rating": "Good Alternative", "health_notes": "Moderate mercury levels. Pregnant women and children should limit intake.", "preparation": "Popular for poke, sashimi, and grilling.", "description": "Yellowfin tuna is one of the most important commercial fish in Hawaii.", "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fishi-pedia.com%2Fwp-content%2Fuploads%2F2020%2F10%2FThunnus-albacares-725x483.jpg&f=1&nofb=1&ipt=b8522242eee1d1e2fb8919f4366ff0bd8f210d28d2e3984ec3a5f4a7747d718d"},
@@ -74,6 +106,18 @@ def get_all_fish():
 
 @api_bp.route('/api/fish/<int:fish_id>', methods=['GET'])
 def get_fish_by_id(fish_id):
+    """
+    Retrieve detailed information for a specific fish by ID.
+
+    Args:
+        fish_id (int): The unique identifier of the fish.
+
+    Returns:
+        dict: JSON object containing the fish details.
+
+    Raises:
+        404: If no fish with the given ID is found.
+    """
     fish = next((f for f in fish_species if f['id'] == fish_id), None)
     if fish:
         return jsonify(fish)
@@ -81,6 +125,12 @@ def get_fish_by_id(fish_id):
 
 @api_bp.route('/api/guides', methods=['GET'])
 def get_guides():
+    """
+    Retrieve all consumer guides.
+
+    Returns:
+        list: JSON array of available consumer guides.
+    """
     guides = [{"id": 1, "title": "Best Fish for Poke", "summary": "Ahi, Tako, and He'e recommendations"}, {"id": 2, "title": "Low Mercury Options for Families", "summary": "Safe choices for children and pregnant women"}]
     return jsonify(guides)
 
@@ -92,6 +142,15 @@ def not_found(error):
 
 @api_bp.route('/api/overfished-areas', methods=['GET'])
 def get_all_overfished_areas():
+    """
+    Retrieve all overfished areas with optional status filter.
+
+    Args:
+        status (str, optional): Filter by overfishing status.
+
+    Returns:
+        dict: JSON object containing total count and list of overfished areas.
+    """
     status = request.args.get('status')
     query = OverfishedArea.query
     if status:
@@ -101,6 +160,18 @@ def get_all_overfished_areas():
 
 @api_bp.route('/api/overfished-areas/<int:entry_id>', methods=['GET'])
 def get_overfished_area(entry_id):
+    """
+    Retrieve a specific overfished area by ID.
+
+    Args:
+        entry_id (int): The unique ID of the overfished area.
+
+    Returns:
+        dict: JSON object containing the overfished area details.
+
+    Raises:
+        404: If no entry with the given ID is found.
+    """
     entry = db.session.get(OverfishedArea, entry_id)
     if not entry:
         return jsonify({"error": f"No overfished area found with id={entry_id}"}), 404
@@ -108,6 +179,12 @@ def get_overfished_area(entry_id):
 
 @api_bp.route('/api/overfished-areas', methods=['POST'])
 def create_overfished_area():
+    """
+    Create a new overfished area entry.
+
+    Returns:
+        dict: JSON object of the newly created entry with status code 201.
+    """
     data = request.get_json()
     if not data:
         return jsonify({"error": "Request body must be JSON."}), 400
@@ -121,6 +198,18 @@ def create_overfished_area():
 
 @api_bp.route('/api/overfished-areas/<int:entry_id>', methods=['DELETE'])
 def delete_overfished_area(entry_id):
+    """
+    Delete an overfished area entry by ID.
+
+    Args:
+        entry_id (int): The ID of the entry to delete.
+
+    Returns:
+        dict: Success message with status code 200.
+
+    Raises:
+        404: If no entry with the given ID is found.
+    """
     entry = db.session.get(OverfishedArea, entry_id)
     if not entry:
         return jsonify({"error": f"No overfished area found with id={entry_id}"}), 404
@@ -133,6 +222,15 @@ def delete_overfished_area(entry_id):
 
 @api_bp.route('/api/imported-species', methods=['GET'])
 def get_all_imported_species():
+    """
+    Retrieve all imported species with optional volume filter.
+
+    Args:
+        volume (str, optional): Filter by import volume.
+
+    Returns:
+        dict: JSON response containing total count and list of imported species.
+    """
     volume = request.args.get('volume')
     query = ImportedSpecies.query
     if volume:
@@ -142,6 +240,18 @@ def get_all_imported_species():
 
 @api_bp.route('/api/imported-species/<int:entry_id>', methods=['GET'])
 def get_imported_species(entry_id):
+    """
+    Retrieve a specific imported species by ID.
+
+    Args:
+        entry_id (int): The unique ID of the imported species.
+
+    Returns:
+        dict: JSON object containing the imported species details.
+
+    Raises:
+        404: If no entry with the given ID is found.
+    """
     entry = db.session.get(ImportedSpecies, entry_id)
     if not entry:
         return jsonify({"error": f"No imported species found with id={entry_id}"}), 404
@@ -149,6 +259,12 @@ def get_imported_species(entry_id):
 
 @api_bp.route('/api/imported-species', methods=['POST'])
 def create_imported_species():
+    """
+    Create a new imported species entry.
+
+    Returns:
+        dict: JSON object of the newly created entry with status code 201.
+    """
     data = request.get_json()
     if not data:
         return jsonify({"error": "Request body must be JSON."}), 400
@@ -162,6 +278,18 @@ def create_imported_species():
 
 @api_bp.route('/api/imported-species/<int:entry_id>', methods=['DELETE'])
 def delete_imported_species(entry_id):
+    """
+    Delete an imported species entry by ID.
+
+    Args:
+        entry_id (int): The ID of the entry to delete.
+
+    Returns:
+        dict: Success message with status code 200.
+
+    Raises:
+        404: If no entry with the given ID is found.
+    """
     entry = db.session.get(ImportedSpecies, entry_id)
     if not entry:
         return jsonify({"error": f"No imported species found with id={entry_id}"}), 404
@@ -174,6 +302,15 @@ def delete_imported_species(entry_id):
 
 @api_bp.route('/api/fishing-methods', methods=['GET'])
 def get_all_fishing_methods():
+    """
+    Retrieve all fishing methods with optional rank filter.
+
+    Args:
+        rank (str, optional): Filter by sustainability rank.
+
+    Returns:
+        dict: JSON response containing total count and list of fishing methods.
+    """
     rank = request.args.get('rank')
     query = FishingMethod.query
     if rank:
@@ -183,6 +320,18 @@ def get_all_fishing_methods():
 
 @api_bp.route('/api/fishing-methods/<int:entry_id>', methods=['GET'])
 def get_fishing_method(entry_id):
+    """
+    Retrieve a specific fishing method by ID.
+
+    Args:
+        entry_id (int): The unique ID of the fishing method.
+
+    Returns:
+        dict: JSON object containing the fishing method details.
+
+    Raises:
+        404: If no entry with the given ID is found.
+    """
     entry = db.session.get(FishingMethod, entry_id)
     if not entry:
         return jsonify({"error": f"No fishing method found with id={entry_id}"}), 404
@@ -190,6 +339,12 @@ def get_fishing_method(entry_id):
 
 @api_bp.route('/api/fishing-methods', methods=['POST'])
 def create_fishing_method():
+    """
+    Create a new fishing method entry.
+
+    Returns:
+        dict: JSON object of the newly created entry with status code 201.
+    """
     data = request.get_json()
     if not data:
         return jsonify({"error": "Request body must be JSON."}), 400
@@ -203,6 +358,18 @@ def create_fishing_method():
 
 @api_bp.route('/api/fishing-methods/<int:entry_id>', methods=['DELETE'])
 def delete_fishing_method(entry_id):
+    """
+    Delete a fishing method entry by ID.
+
+    Args:
+        entry_id (int): The ID of the entry to delete.
+
+    Returns:
+        dict: Success message with status code 200.
+
+    Raises:
+        404: If no entry with the given ID is found.
+    """
     entry = db.session.get(FishingMethod, entry_id)
     if not entry:
         return jsonify({"error": f"No fishing method found with id={entry_id}"}), 404
@@ -614,6 +781,15 @@ CONSUMER_GUIDES = [
 
 @api_bp.route('/api/consumer-guides', methods=['GET'])
 def get_all_consumer_guides():
+    """
+    Retrieve all consumer guides.
+
+    Args:
+        filters (str, optional): Filter guides by keywords in the filters field.
+
+    Returns:
+        list: JSON array of consumer guides matching the filter criteria.
+    """
     filters = request.args.get('filters', '').lower()
 
     result = CONSUMER_GUIDES  
@@ -629,6 +805,18 @@ def get_all_consumer_guides():
 
 @api_bp.route('/api/consumer-guides/<int:guide_id>', methods=['GET'])
 def get_consumer_guide(guide_id):
+    """
+    Retrieve a specific consumer guide by its ID.
+
+    Args:
+        guide_id (int): The unique identifier of the consumer guide.
+
+    Returns:
+        dict: JSON object containing the guide details.
+
+    Raises:
+        404: If no guide with the given ID is found.
+    """
     guide = next((g for g in CONSUMER_GUIDES if g.get("id") == guide_id), None)
 
     if not guide:
@@ -638,6 +826,15 @@ def get_consumer_guide(guide_id):
 
 @api_bp.route('/api/consumer-guides', methods=['POST'])
 def create_consumer_guide():
+    """
+    Create a new consumer guide.
+
+    Returns:
+        dict: JSON object of the newly created guide with status code 201.
+
+    Raises:
+        400: If required fields are missing or request body is not valid JSON.
+    """
     data = request.get_json()
 
     if not data:
@@ -659,6 +856,18 @@ def create_consumer_guide():
 
 @api_bp.route('/api/consumer-guides/<int:guide_id>', methods=['DELETE'])
 def delete_consumer_guide(guide_id):
+    """
+    Delete a consumer guide by its ID.
+
+    Args:
+        guide_id (int): The unique identifier of the guide to delete.
+
+    Returns:
+        dict: Success message with status code 200.
+
+    Raises:
+        404: If no guide with the given ID is found.
+    """
     global CONSUMER_GUIDES
 
     original_length = len(CONSUMER_GUIDES)
@@ -674,6 +883,18 @@ def delete_consumer_guide(guide_id):
 
 @api_bp.route('/guides/<int:guide_id>')
 def guide_page(guide_id):
+    """
+    Render the detailed HTML page for a specific consumer guide.
+
+    Args:
+        guide_id (int): The unique identifier of the guide to display.
+
+    Returns:
+        str: Rendered HTML template for the consumer guide detail page.
+
+    Raises:
+        404: If no guide with the given ID is found.
+    """
     guide = next((g for g in CONSUMER_GUIDES if g.get("id") == guide_id), None)
 
     if not guide:
